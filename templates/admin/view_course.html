@@ -1,0 +1,35 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Status</th>
+                <th scope="col">Added By</th>
+                <th scope="col">View More</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in course %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.price }}</td>
+                <td>
+                    {% if not i.status %}
+                        Not Verified
+                    {% else %}
+                        Verified
+                    {% endif %}
+                </td>
+                <td>{{ i.INSTRUCTOR.name }}</td>
+                <td><a href="view_more_course/{{ i.id }}">View More</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+<div class="container" style="max-width: 400px; margin: auto;">
+    <h2 style="text-align: center;">Add New Instructor</h2>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required class="form-control" max="2000-01-01">
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone (10 digits):</label>
+            <input type="text" id="phone" name="phone" required class="form-control" maxlength="10">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required class="form-control">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" required class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Instructor</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+
+        // Validate name: only letters
+        const namePattern = /^[A-Za-z\s]+$/;
+        if (!namePattern.test(name)) {
+            alert("Name must contain only letters.");
+            return false;
+        }
+
+        // Validate phone: must be 10 digits
+        const phonePattern = /^\d{10}$/;
+        if (!phonePattern.test(phone)) {
+            alert("Phone number must be 10 digits.");
+            return false;
+        }
+
+        return true;  // Allow form submission
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+
+<div class="container" style="max-width: 400px; margin: auto;">
+    <h2 style="text-align: center;">Edit Instructor</h2>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ ins.name }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" value="{{ ins.dob|date:'Y-m-d' }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone (10 digits):</label>
+            <input type="text" id="phone" name="phone" value="{{ ins.phone }}" class="form-control" maxlength="10" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ ins.email }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" class="form-control" required>
+                <option value="">Select</option>
+                <option value="Male" {% if ins.gender == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if ins.gender == "Female" %}selected{% endif %}>Female</option>
+                <option value="Other" {% if ins.gender == "Other" %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Instructor</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const dob = document.getElementById('dob').value;
+
+        // Validate name: only letters
+        const namePattern = /^[A-Za-z\s]+$/;
+        if (!namePattern.test(name)) {
+            alert("Name must contain only letters.");
+            return false;
+        }
+
+        // Validate phone: must be 10 digits
+        const phonePattern = /^\d{10}$/;
+        if (!phonePattern.test(phone)) {
+            alert("Phone number must be 10 digits.");
+            return false;
+        }
+
+        // Validate Date of Birth: must be at least 20 years ago
+        const dobDate = new Date(dob);
+        const today = new Date();
+        const minAgeDate = new Date(today.getFullYear() - 20, today.getMonth(), today.getDate());
+
+        if (dobDate > minAgeDate) {
+            alert("You must be at least 20 years old.");
+            return false;
+        }
+
+        return true;  // Allow form submission
+    }
+</script>
+
+{% endblock %}

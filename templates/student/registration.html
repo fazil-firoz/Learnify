@@ -1,0 +1,139 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>DASHGUM - Bootstrap Admin Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/Admin/assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="/static/Admin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        
+    <!-- Custom styles for this template -->
+    <link href="/static/Admin/assets/css/style.css" rel="stylesheet">
+    <link href="/static/Admin/assets/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+
+	  <div id="login-page">
+	  	<div class="container">
+            <h2 style="text-align: center; font-size: 50px;color: cyan">Learnify</h2>
+	  	
+		      <form class="form-login" action="" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+		        <h2 class="form-login-heading">Register Now</h2>
+		        <div class="login-wrap">
+
+    <form method="POST" enctype="multipart/form-data" id="registrationForm" onsubmit="return validateDate()">
+        {% csrf_token %}
+
+        <!-- Name (Only letters allowed) -->
+        <input type="text" class="form-control" placeholder="Name" name="name" pattern="[A-Za-z\s]+" title="Name should contain only letters." required><br>
+
+        <!-- Gender -->
+        <select class="form-control" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <!-- Phone (Only 10 digits allowed, starting with 6-9) -->
+        <input type="text" class="form-control" placeholder="Phone" name="phone" pattern="[6-9]{1}[0-9]{9}" title="Phone number must start with 6-9 and be 10 digits long." required><br>
+
+        <!-- Email -->
+        <input type="email" class="form-control" placeholder="Email" name="email" required><br>
+
+        <!-- Photo (Only images allowed: jpg, jpeg, png) -->
+        <label for="photo">Upload Photo</label>
+        <input type="file" class="form-control" name="photo" accept="image/png, image/jpeg, image/jpg" title="Only image files (jpg, jpeg, png) are allowed." required><br>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" class="form-control" max="2009-01-01" required>
+            <span id="dobError" style="color:red;"></span>
+        </div>
+        <!-- ID Number -->
+        <!-- Password -->
+        <input type="password" class="form-control" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required><br><br>
+
+        <!-- Register Button -->
+        <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> Register</button>
+        <hr>
+    </form>
+
+                    <script>
+        function validateDate() {
+    const dobInput = document.getElementById('dob').value;
+    const dobError = document.getElementById('dobError');
+
+    // Clear previous error message
+    dobError.textContent = '';
+
+    if (!dobInput) {
+        dobError.textContent = 'Please enter your date of birth.';
+        return false;
+    }
+
+    const dob = new Date(dobInput);
+    const today = new Date();
+
+    // Calculate the age difference in milliseconds
+    const ageDiffMs = today.getTime() - dob.getTime();
+
+    // Convert age difference from milliseconds to years
+    const ageDate = new Date(ageDiffMs);
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+    // Check if age is at least 15
+    if (age < 15) {
+        dobError.textContent = 'You must be at least 15 years old to register.';
+        return false;
+    }
+
+    return true; // Submit form if validation passes
+}
+
+    </script>
+
+</div>
+		          <!-- Modal -->
+
+		          <!-- modal -->
+		
+		      </form>	  	
+	  	
+	  	</div>
+	  </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="/static/Admin/assets/js/jquery.js"></script>
+    <script src="/static/Admin/assets/js/bootstrap.min.js"></script>
+
+    <!--BACKSTRETCH-->
+    <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+    <script type="text/javascript" src="/static/Admin/assets/js/jquery.backstretch.min.js"></script>
+    <script>
+        $.backstretch("/static/Student/img/course-3.jpg", {speed: 500});
+    </script>
+
+
+  </body>
+</html>

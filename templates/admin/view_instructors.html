@@ -1,0 +1,38 @@
+{% extends 'admin/base.html' %}
+
+{% block body %}
+
+<a href="add_new_instructor" class="btn btn-primary" style="margin-left: 300px; margin-top: 20px; font-size: 18px;">
+    Add New Instructor
+</a><br>
+    {% if not instructors %}
+    <h2 style="text-align: center">No Instructor Found</h2>
+
+    {% else %}
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Course</th>
+      <th scope="col">Gender</th>
+      <th scope="col">View More</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in instructors %}
+    <tr>
+      <th>{{ forloop.counter }}</th>
+      <td>{{ i.name }}</td>
+      <td>{{ i.phone }}</td>
+      <td>{{ i.COURSE.name }}</td>
+      <td>{{ i.gender }}</td>
+      <td><a href="view_more_instructor/{{ i.id }}">View More</a></td>
+    </tr>
+{% endfor %}
+
+</table>
+    {% endif %}
+
+{% endblock %}

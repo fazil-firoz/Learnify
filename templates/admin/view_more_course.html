@@ -1,0 +1,59 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+<div class="container mt-5" style="margin-left: 10%;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="min-height: 600px;">
+                <div class="card-header text-center">
+                    <button onclick="history.back()" class="btn btn-primary">Back</button>
+                    <h2>Course Details</h2>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ course.thumbnail.url }}" alt="{{ course.name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
+                    <h5 class="card-title">{{ course.name }}</h5>
+                    <p class="card-text"><strong>Description:</strong> {{ course.description }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ course.price }}</p>
+                    <p class="card-text"><strong>Added By:</strong> {{ course.INSTRUCTOR.name }}</p>
+                    <p class="card-text"><strong>ID Number:</strong> {{ course.INSTRUCTOR.id_number }}</p>
+                    <p class="card-text"><strong>Status:</strong> {{ course.status }}</p>
+                </div>
+
+                <!-- Displaying Course Videos -->
+                <div class="card-body">
+                    <h5>Course Videos</h5>
+                    <ul class="list-group">
+                        {% for video in videos %}
+                        <li class="list-group-item">
+                            <a href="{{ video.file.url }}" target="_blank">Video {{ forloop.counter }}</a>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No videos available for this course.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card-footer text-center">
+                    {% if course.status == False %}
+                    <a href="/accept_course/{{ course.id }}" class="btn btn-success">Approve</a>
+                    {% else %}
+                    <a href="/reject_course/{{ course.id }}" class="btn btn-danger">Reject</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        min-height: 500px;
+    }
+    .img-fluid {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

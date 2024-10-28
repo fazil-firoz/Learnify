@@ -1,0 +1,115 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+
+    <title>DASHGUM - Bootstrap Admin Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/Admin/assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="/static/Admin/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        
+    <!-- Custom styles for this template -->
+    <link href="/static/Admin/assets/css/style.css" rel="stylesheet">
+    <link href="/static/Admin/assets/css/style-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+      <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+
+	  <div id="login-page">
+	  	<div class="container">
+            <h2 style="text-align: center; font-size: 50px;color: cyan">Learnify</h2>
+	  	
+		      <form class="form-login" action="{% url 'edit_profile' profile.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2 class="form-login-heading">Edit Profile</h2>
+
+    <div class="login-wrap">
+        <!-- Name (Only letters allowed) -->
+        <input type="text" class="form-control" placeholder="Name" name="name" value="{{ profile.name }}" pattern="[A-Za-z\s]+" title="Name should contain only letters." required><br>
+
+        <!-- Gender -->
+        <select class="form-control" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male" {% if profile.gender == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
+            <option value="Other" {% if profile.gender == 'Other' %}selected{% endif %}>Other</option>
+        </select><br>
+
+        <!-- Phone (Only 10 digits allowed, starting with 6-9) -->
+        <input type="text" class="form-control" placeholder="Phone" name="phone" value="{{ profile.phone }}" pattern="[6-9]{1}[0-9]{9}" title="Phone number must start with 6-9 and be 10 digits long." required><br>
+
+        <!-- Email -->
+        <input type="email" class="form-control" placeholder="Email" name="email" value="{{ profile.email }}" required><br>
+
+        <!-- Photo (Only images allowed: jpg, jpeg, png) -->
+        <label for="photo">Upload Photo</label>
+        <input type="file" class="form-control" name="photo" accept="image/png, image/jpeg, image/jpg" title="Only image files (jpg, jpeg, png) are allowed."><br>
+{#        <img src="{{ profile.photo.url }}" alt="{{ profile.name }}'s photo" class="w-16 h-16 rounded-full border-2 border-gray-300 mb-4"> #}
+
+        <!-- Date of Birth -->
+        <input type="date" class="form-control" placeholder="Date of Birth" name="dob" value="{{ profile.dob|date:'Y-m-d' }}" required><br>
+
+        <!-- Register Button -->
+        <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-pencil"></i> Update Profile</button>
+        <hr>
+    </div>
+</form>
+
+</div><br><br>
+		          <!-- Modal -->
+		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+		              <div class="modal-dialog">
+		                  <div class="modal-content">
+		                      <div class="modal-header">
+		                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                          <h4 class="modal-title">Forgot Password ?</h4>
+		                      </div>
+		                      <div class="modal-body">
+		                          <p>Enter your e-mail address below to reset your password.</p>
+		                          <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+		
+		                      </div>
+		                      <div class="modal-footer">
+		                          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+		                          <button class="btn btn-theme" type="button">Submit</button>
+		                      </div>
+		                  </div>
+		              </div>
+		          </div>
+		          <!-- modal -->
+		
+		      </form>	  	
+	  	
+	  	</div>
+	  </div>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="/static/Admin/assets/js/jquery.js"></script>
+    <script src="/static/Admin/assets/js/bootstrap.min.js"></script>
+
+    <!--BACKSTRETCH-->
+    <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+    <script type="text/javascript" src="/static/Admin/assets/js/jquery.backstretch.min.js"></script>
+    <script>
+        $.backstretch("/static/Student/img/course-3.jpg", {speed: 500});
+    </script>
+
+
+  </body>
+</html>

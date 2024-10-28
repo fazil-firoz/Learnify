@@ -1,0 +1,54 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+<div class="container mt-5" style="margin-left: 10%;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="min-height: 600px;"> <!-- Increased height -->
+                <div class="card-header text-center">                                        <button onclick="history.back()" class="btn btn-primary">Back</button>
+
+                    <h2>Student Details</h2>
+                    <!-- Back Button at the top -->
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
+                    <h5 class="card-title">{{ student.name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ student.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ student.phone }}</p>
+                    <p class="card-text"><strong>Date of Birth:</strong> {{ student.dob }}</p>
+                    <p class="card-text"><strong>Gender:</strong> {{ student.gender }}</p>
+                    <p class="card-text"><strong>ID Number:</strong> {{ student.id_number }}</p>
+                    <p class="card-text"><strong>Status</strong> {{ student.LOGIN.type }}</p>
+
+                </div>
+                            <div class="card-footer text-center">
+
+                {% if student.LOGIN.type == 'pending' %}
+                    <a href="/accept_student/{{ student.id }}" class="btn btn-success">Accept</a>&nbsp;&nbsp;&nbsp;
+                    <a href="/reject_student/{{ student.id }}" class="btn btn-danger">Reject</a>&nbsp;&nbsp;&nbsp;
+                {% else %}
+                    <a href="/block_student/{{ student.id }}" class="btn btn-danger">Block</a>&nbsp;&nbsp;&nbsp;
+                    <a href="/unblock_student/{{ student.id }}" class="btn btn-success">Unblock</a>
+                {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: white; /* Ensures the card has a white background */
+        padding: 20px; /* Adds padding studentide the card */
+        border-radius: 10px; /* Rounded corners for a softer look */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        min-height: 500px; /* Set a minimum height for the card */
+    }
+
+    /* Optional: Add margin to the image if needed */
+    .img-fluid {
+        margin-bottom: 15px; /* Adjusts space below the image */
+    }
+</style>
+{% endblock %}

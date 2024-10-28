@@ -1,0 +1,84 @@
+{% extends 'admin/base.html' %}
+      {% block body %}
+
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h3 {
+            color: #444;
+            text-align: center;
+            margin-top: 20px;
+        }
+        section.wrapper {
+            padding: 20px;
+            width: 80%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<section class="wrapper">
+    <h3>Course Statistics</h3>
+    <canvas id="courseStatsChart" width="400" height="200"></canvas>
+</section>
+
+<script>
+    // Data from the Django view (passed from the backend)
+    const totalCourses = {{ total_courses }};
+    const verifiedCourses = {{ verified_courses }};
+    const totalEnrollments = {{ total_enrollments }};
+    const pendingCourses = {{ pending_courses }};
+
+    // Chart.js configuration
+    const ctx = document.getElementById('courseStatsChart').getContext('2d');
+    const courseStatsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Total Courses', 'Verified Courses', 'Total Enrollments', 'Pending Courses'],
+            datasets: [{
+                label: 'Course Statistics',
+                data: [totalCourses, verifiedCourses, totalEnrollments, pendingCourses],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+      {% endblock %}
+

@@ -1,0 +1,99 @@
+{% extends 'instructor/base.html' %}
+{% block body %}
+<div class="container mt-5">
+    <!-- Dropdown to choose course -->
+    <div class="mb-3">
+        <a href="add_course" class="btn btn-success">Add New Course</a><br><br>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="selected_course">Select a Course:</label>
+            <select name="selected_course" id="selected_course" class="form-control" onchange="this.form.submit()">
+                <option value="">-- Select Course --</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}" {% if selected_course and selected_course.id == course.id %}selected{% endif %}>
+                        {{ course.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+
+    <!-- Show selected course details in card view -->
+    {% if selected_course %}
+        <div class="card mt-4">
+            <div class="card-header text-center">
+                <h3>{{ selected_course.name }}</h3>
+                <!-- Button to open video upload modal -->
+
+            </div>
+            <div class="card-body text-center">
+                <img src="{{ selected_course.thumbnail.url }}" alt="{{ selected_course.name }}" class="img-fluid mb-3" style="width: 150px; height: 150px;">
+                <p><strong>Description:</strong> {{ selected_course.description }}</p>
+                <p><strong>Price:</strong> {{ selected_course.price }}</p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoUploadModal">
+                    Add Video
+                </button>
+            </div>
+        </div>
+
+        <!-- List of course videos -->
+        <div class="mt-4">
+            <h4>Videos for this Course:</h4>
+            {% if selected_course.course_video.all %}
+                <ul>
+                    {% for video in selected_course.course_video.all %}
+                        <li><a href="{{ video.file.url }}" target="_blank">Video {{ forloop.counter }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No videos uploaded for this course.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Video Upload Modal -->
+<div class="modal fade" id="videoUploadModal" tabindex="-1" role="dialog" aria-labelledby="videoUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoUploadModalLabel">Upload Video</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/add_video_for_course" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="course_id" value="{{ selected_course.id }}">
+                    <div class="form-group">
+                        <label for="video_file">Select Video File:</label>
+                        <input type="file" class="form-control-file" name="video_file" id="video_file" accept=".mp4, .avi, .mov" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="video_file">Select Image File:</label>
+                        <input type="file" class="form-control-file" name="image" id="video_file" accept=".jpg, .png, .jpeg" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload Video</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+{% endblock %}

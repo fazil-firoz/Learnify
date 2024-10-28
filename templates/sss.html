@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #certificate {
+            border: 10px solid #000;
+            padding: 50px;
+            width: 70%;
+            margin: 0 auto;
+            background-color: #f3f3f3;
+        }
+        h1, h2 {
+            margin: 0;
+            padding: 10px;
+        }
+        .print-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="certificate">
+        <h1>Certificate of Completion</h1>
+        <p>This is to certify that</p>
+        <h2 id="studentName">[Name]</h2>
+        <p>has successfully completed the course</p>
+        <h2 id="courseName">[Course Name]</h2>
+        <p>on <span id="date"></span>.</p>
+    </div>
+
+    <button class="print-btn" onclick="printCertificate()">Print Certificate</button>
+
+    <script>
+        // Function to populate certificate and print
+        function printCertificate() {
+            // Get name and course (you could retrieve these values from user input or dynamically)
+            var studentName = prompt("Enter the student's name:");
+            var courseName = prompt("Enter the course name:");
+
+            // Set the name and course in the template
+            document.getElementById('studentName').innerText = studentName;
+            document.getElementById('courseName').innerText = courseName;
+
+            // Get the current date
+            var today = new Date().toLocaleDateString();
+            document.getElementById('date').innerText = today;
+
+            // Trigger print dialog
+            window.print();
+        }
+    </script>
+</body>
+</html>

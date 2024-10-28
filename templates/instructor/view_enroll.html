@@ -1,0 +1,48 @@
+{% extends 'instructor/base.html' %}
+{% block body %}
+    <div class="container mx-auto px-6 py-8">
+        {% if not enroll %}
+            <h2 class="text-center text-2xl font-semibold text-red-500">No students enrolled</h2>
+        {% else %}
+            <div class="shadow-lg rounded-lg overflow-hidden">
+                <table class="min-w-full bg-gray-800 text-white rounded-lg shadow-md">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="py-3 px-6 text-left">#</th>
+                            <th class="py-3 px-6 text-left">Student Name</th>
+                            <th class="py-3 px-6 text-left">Course</th>
+                            <th class="py-3 px-6 text-left">Payment Status</th>
+                            <th class="py-3 px-6 text-left">Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in enroll %}
+                            <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-700">
+                                <td class="py-3 px-6">{{ forloop.counter }}</td>
+                                <td class="py-3 px-6">{{ i.STUDENT.name }}</td>
+                                <td class="py-3 px-6">{{ i.COURSE.name }}</td>
+                                <td class="py-3 px-6">
+                                    {% if i.payment_status %}
+                                        <span class="bg-green-500 text-green-100 text-xl font-semibold rounded-full px-3 py-1">
+                                            Paid: ₹ {{ i.COURSE.price }}
+                                        </span>
+                                    {% else %}
+                                        <span class="bg-red-500 text-red-100 text-xs font-semibold rounded-full px-3 py-1">
+                                            Not Paid
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 px-6">
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-blue-500 h-4 rounded-full" style="width: {{ i.progress }}%;"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-400">{{ i.progress }}%</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

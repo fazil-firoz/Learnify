@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block body %}
+<div class="container mt-5" style="margin-left: 10%;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="min-height: 500px;"> <!-- Increased height -->
+                <div class="card-header text-center">
+                    <h2>Instructor Details</h2>
+                    <!-- Back Button at the top -->
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ ins.photo.url }}" alt="{{ ins.name }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
+                    <h5 class="card-title">{{ ins.name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ ins.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ ins.phone }}</p>
+                    <p class="card-text"><strong>Date of Birth:</strong> {{ ins.dob }}</p>
+                    <p class="card-text"><strong>Gender:</strong> {{ ins.gender }}</p>
+                    <p class="card-text"><strong>ID Number:</strong> {{ ins.id }}</p>
+                    {% if ins.COURSE %}
+                    <p class="card-text"><strong>Course:</strong> {{ ins.COURSE.name }}</p>
+                    {% else %}
+                    <p class="card-text"><strong>Course:</strong> Not Assigned</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/edit_instructor/{{ ins.id }}" class="btn btn-success">Edit Instructor</a>&nbsp;&nbsp;&nbsp;
+                    <button onclick="history.back()" class="btn btn-primary">Back to Instructors</button>&nbsp;&nbsp;&nbsp;
+                    <a href="/delete_instructor/{{ ins.id }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this instructor?');">Delete Instructor</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: white; /* Ensures the card has a white background */
+        padding: 20px; /* Adds padding inside the card */
+        border-radius: 10px; /* Rounded corners for a softer look */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        min-height: 500px; /* Set a minimum height for the card */
+    }
+
+    /* Optional: Add margin to the image if needed */
+    .img-fluid {
+        margin-bottom: 15px; /* Adjusts space below the image */
+    }
+</style>
+{% endblock %}

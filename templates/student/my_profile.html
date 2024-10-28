@@ -1,0 +1,120 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mx-auto mt-8">
+    <!-- Profile section with improved styling -->
+    <div class="profile-section bg-white shadow-lg rounded-lg p-8 mb-10">
+        <h2 class="text-3xl font-bold mb-6 text-center text-blue-600">My Profile</h2>
+        <div class="flex items-center justify-center mb-6">
+            <!-- Profile image -->
+            <img src="{{ my_profile.photo.url }}" alt="{{ my_profile.name }}'s photo" class="w-32 h-32 rounded-full border-4 border-blue-200 object-cover">
+        </div>
+        <div class="text-center text-brown font-sans">
+            <h3 class="text-2xl font-semibold mb-2">{{ my_profile.name|capfirst }}</h3>
+            <p class="text-gray-700"><strong>Gender:</strong> {{ my_profile.gender }}</p>
+            <p class="text-gray-700"><strong>Phone:</strong> {{ my_profile.phone }}</p>
+            <p class="text-gray-700"><strong>Email:</strong> {{ my_profile.email }}</p>
+            <p class="text-gray-700"><strong>Date of Birth:</strong> {{ my_profile.dob }}</p>
+        </div>
+        <div class="flex justify-center mt-6 space-x-4">
+            <a href="edit_profile/{{ my_profile.id }}" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-300">Edit Profile</a>
+            <a href="/student_change_password" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition duration-300">Change Password</a>
+        </div>
+    </div>
+
+    <div class="courses-section mt-10">
+        <h2 class="text-3xl font-bold mb-6 text-center text-blue-600">My Courses</h2>
+
+        {% for course_data in course_progress_data %}
+        <div class="course-card bg-gray-100 p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-2xl font-semibold">{{ course_data.course.name }}</h3>
+            <p class="mt-2">{{ course_data.course.description }}</p>
+            <p class="mt-2 text-gray-700">Overall Progress: {{ course_data.course_progress|floatformat:2 }}%</p>
+
+            <div class="videos mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <h4 class="text-lg font-medium col-span-2">Course Videos</h4>
+                {% for video_data in course_data.videos %}
+                <div class="video-card bg-white p-4 rounded-lg shadow">
+                    <video id="course-video-{{ video_data.video.id }}"
+                           data-enrollment-id="{{ video_data.enrollment_id }}"
+                           width="100%" controls>
+                        <source src="{{ video_data.video.file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="progress-bar-container mt-2" style="width: 100%; height: 10px; background-color: #e0e0e0; border-radius: 5px;">
+                        <div id="progress-bar-{{ video_data.video.id }}"
+                             class="progress-bar"
+                             style="width: {% widthratio video_data.progress.watched_time video_data.video.duration 100 %}%; height: 100%; background-color: {% if video_data.progress.completed %}#4CAF50{% else %}#76c7c0{% endif %}; border-radius: 5px;">
+                        </div>
+                    </div>
+                    <p class="mt-1 text-gray-600">Status: {% if video_data.progress.completed %}Completed{% else %}In Progress{% endif %}</p>
+                </div>
+                {% if forloop.counter|divisibleby:2 and not forloop.last %}</div><div class="videos mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">{% endif %}
+                {% endfor %}
+            </div>
+
+            {% if course_data.is_completed %}
+            <div class="mt-4 text-center">
+                <form action="{% url 'get_certificate' course_data.enrollment.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Get Certificate</button>
+                </form>
+            </div>
+            {% else %}
+            <p class="mt-4 text-red-500 text-center">Complete all course videos to get the certificate.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        video.addEventListener('timeupdate', function() {
+            const videoId = this.id.split('-')[2];
+            const enrollmentId = this.getAttribute('data-enrollment-id');
+            const progressBar = document.getElementById(`progress-bar-${videoId}`);
+            const progress = (this.currentTime / this.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Send progress update to server
+            if (this.currentTime % 5 < 1) {  // Update every 5 seconds
+                fetch('/update_video_progress/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        enrollment_id: enrollmentId,
+                        video_id: videoId,
+                        watched_time: this.currentTime,
+                        duration: this.duration
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.video_completed) {
+                            progressBar.style.backgroundColor = '#4CAF50';
+                            const statusElement = progressBar.nextElementSibling;
+                            if (statusElement) {
+                                statusElement.textContent = 'Status: Completed';
+                            }
+                        }
+
+                        const courseProgressElement = document.querySelector(`#course-progress-${enrollmentId}`);
+                        if (courseProgressElement) {
+                            courseProgressElement.textContent = `Overall Progress: ${data.course_progress.toFixed(2)}%`;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
